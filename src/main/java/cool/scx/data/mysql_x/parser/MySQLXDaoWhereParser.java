@@ -1,0 +1,122 @@
+package cool.scx.data.mysql_x.parser;
+
+import cool.scx.common.util.StringUtils;
+import cool.scx.data.query.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
+
+import static cool.scx.common.util.ArrayUtils.toObjectArray;
+import static java.util.Collections.addAll;
+
+/**
+ * @author scx567888
+ * @version 0.0.1
+ */
+public class MySQLXDaoWhereParser {
+
+    public static final MySQLXDaoWhereParser WHERE_PARSER = new MySQLXDaoWhereParser();
+
+    public WhereClause parseEqual(Condition w) {
+        var whereParams = new Object[]{w.value1()};
+        var whereClause = w.selector() + " " + getWhereKeyWord(w.conditionType()) + " ?";
+        return new WhereClause(whereClause, whereParams);
+    }
+
+
+    public WhereClause parseLike(Condition w) {
+        var whereParams = new Object[]{w.value1()};
+        var whereClause = w.selector() + " " + getWhereKeyWord(w.conditionType()) + " '%?%'";
+        return new WhereClause(whereClause, whereParams);
+    }
+
+
+    public WhereClause parseIn(Condition w) {
+        //移除空值并去重
+        var whereParams = Arrays.stream(toObjectArray(w.value1())).filter(Objects::nonNull).distinct().toArray();
+        //长度为空是抛异常
+        if (whereParams.length == 0) {
+            throw new IllegalArgumentException("");
+        }
+        var v1 = "(" + StringUtils.repeat("?", ", ", whereParams.length) + ")";
+        var whereClause = w.selector() + " " + getWhereKeyWord(w.conditionType()) + " " + v1;
+        return new WhereClause(whereClause, whereParams);
+    }
+
+
+    public WhereClause parseBetween(Condition w) {
+        var whereParams = new Object[]{w.value1(), w.value2()};
+        var whereClause = w.selector() + " " + getWhereKeyWord(w.conditionType()) + " ? AND ?";
+        return new WhereClause(whereClause, whereParams);
+    }
+
+
+    public WhereClause parse(Where obj) {
+        return switch (obj) {
+            case WhereClause w -> parseWhereClause(w);
+            case Junction l -> parseLogic(l);
+            case Condition w -> parseCondition(w);
+            default -> throw new IllegalArgumentException("Unknown WhereClause: " + obj);
+        };
+    }
+
+    protected WhereClause parseWhereClause(WhereClause w) {
+        return w;
+    }
+
+    protected final WhereClause parseLogic(Junction l) {
+        var clauses = new ArrayList<String>();
+        var whereParams = new ArrayList<>();
+        for (var c : l.clauses()) {
+            var w = parse(c);
+            if (w != null && !w.isEmpty()) {
+                clauses.add(w.expression());
+                addAll(whereParams, w.params());
+            }
+        }
+        var clause = String.join(" " + getLogicKeyWord(l) + " ", clauses);
+        //只有 子句数量 大于 1 时, 我们才在两端拼接 括号
+        if (clauses.size() > 1) {
+            clause = "(" + clause + ")";
+        }
+        return new WhereClause(clause, whereParams.toArray());
+    }
+
+    protected String getLogicKeyWord(Junction logicType) {
+        return switch (logicType) {
+            case Or o -> "OR";
+            case And a -> "AND";
+        };
+    }
+
+    protected WhereClause parseCondition(Condition body) {
+        return switch (body.conditionType()) {
+            case EQ, NE,
+                 LT, LTE,
+                 GT, GTE,
+                 LIKE_REGEX, NOT_LIKE_REGEX -> parseEqual(body);
+            case LIKE, NOT_LIKE -> parseLike(body);
+            case IN, NOT_IN -> parseIn(body);
+            case BETWEEN, NOT_BETWEEN -> parseBetween(body);
+        };
+    }
+
+    public String getWhereKeyWord(ConditionType whereType) {
+        return switch (whereType) {
+            case EQ -> "=";
+            case NE -> "<>";
+            case LT -> "<";
+            case LTE -> "<=";
+            case GT -> ">";
+            case GTE -> ">=";
+            case LIKE, LIKE_REGEX -> "LIKE";
+            case NOT_LIKE, NOT_LIKE_REGEX -> "NOT LIKE";
+            case IN -> "IN";
+            case NOT_IN -> "NOT IN";
+            case BETWEEN -> "BETWEEN";
+            case NOT_BETWEEN -> "NOT BETWEEN";
+        };
+    }
+
+}
