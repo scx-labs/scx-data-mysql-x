@@ -101,7 +101,7 @@
 
     <properties>
 
-        <scx.version>3.7.8</scx.version>
+        <scx.version>3.8.0</scx.version>
         <mysql-connector-j.version>9.2.0</mysql-connector-j.version>
         <testng.version>7.10.2</testng.version>
 
