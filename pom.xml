@@ -81,6 +81,12 @@
             <version>${mysql-connector-j.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>cool.scx</groupId>
+            <artifactId>scx-common</artifactId>
+            <version>${scx.version}</version>
+        </dependency>
+
         <!-- ****************** 以下为测试依赖 ****************** -->
 
         <dependency>
@@ -101,7 +107,7 @@
 
     <properties>
 
-        <scx.version>3.8.0</scx.version>
+        <scx.version>3.8.5</scx.version>
         <mysql-connector-j.version>9.2.0</mysql-connector-j.version>
         <testng.version>7.10.2</testng.version>
 

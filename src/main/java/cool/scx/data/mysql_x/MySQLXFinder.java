@@ -1,8 +1,10 @@
 package cool.scx.data.mysql_x;
 
 import cool.scx.data.Finder;
+import cool.scx.data.exception.DataAccessException;
 import cool.scx.data.field_policy.FieldPolicy;
 import cool.scx.data.query.Query;
+import cool.scx.functional.ScxConsumer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +57,7 @@ public class MySQLXFinder<Entity> implements Finder<Entity> {
     }
 
     @Override
-    public void forEach(Consumer<Entity> entityConsumer) {
+    public <E extends Throwable> void forEach(ScxConsumer<Entity, E> entityConsumer) throws DataAccessException, E {
         var whereClause = WHERE_PARSER.parse(query.getWhere());
         var findStatement = repository.collection
                 .find(whereClause.expression())
@@ -73,12 +75,12 @@ public class MySQLXFinder<Entity> implements Finder<Entity> {
     }
 
     @Override
-    public <T> void forEach(Consumer<T> entityConsumer, Class<T> resultType) {
+    public <T, E extends Throwable> void forEach(ScxConsumer<T, E> entityConsumer, Class<T> resultType) throws DataAccessException, E {
         throw new UnsupportedOperationException("暂未实现");
     }
 
     @Override
-    public void forEachMap(Consumer<Map<String, Object>> entityConsumer) {
+    public <E extends Throwable> void forEachMap(ScxConsumer<Map<String, Object>, E> entityConsumer) throws DataAccessException, E {
         throw new UnsupportedOperationException("暂未实现");
     }
 
