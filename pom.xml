@@ -12,7 +12,7 @@
 
     <artifactId>scx-data-mysql-x</artifactId>
     <packaging>jar</packaging>
-    <version>3.8.0</version>
+    <version>3.8.5</version>
 
     <name>SCX Data MySQL X</name>
     <url>https://github.com/scx567888/scx-data-mysql-x</url>
