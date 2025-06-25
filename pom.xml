@@ -81,6 +81,12 @@
             <version>${mysql-connector-j.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>cool.scx</groupId>
+            <artifactId>scx-common</artifactId>
+            <version>${scx.version}</version>
+        </dependency>
+
         <!-- ****************** 以下为测试依赖 ****************** -->
 
         <dependency>
