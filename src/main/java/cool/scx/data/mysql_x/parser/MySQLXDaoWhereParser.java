@@ -1,7 +1,7 @@
 package cool.scx.data.mysql_x.parser;
 
 import cool.scx.common.util.StringUtils;
-import cool.scx.data.query.*;
+import dev.scx.data.query.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

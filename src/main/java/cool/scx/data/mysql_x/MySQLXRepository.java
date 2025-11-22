@@ -1,14 +1,15 @@
 package cool.scx.data.mysql_x;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mysql.cj.xdevapi.DbDoc;
 import com.mysql.cj.xdevapi.Schema;
 import cool.scx.common.util.CaseUtils;
 import cool.scx.common.util.StringUtils;
-import cool.scx.data.Finder;
-import cool.scx.data.Repository;
-import cool.scx.data.field_policy.FieldPolicy;
-import cool.scx.data.query.Query;
+import cool.scx.object.ScxObject;
+import cool.scx.object.node.ObjectNode;
+import dev.scx.data.Finder;
+import dev.scx.data.Repository;
+import dev.scx.data.field_policy.FieldPolicy;
+import dev.scx.data.query.Query;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -28,12 +29,10 @@ public class MySQLXRepository<Entity> implements Repository<Entity, String> {
 
     final com.mysql.cj.xdevapi.Collection collection;
     final Class<Entity> entityClass;
-    final JsonHelper jsonHelper;
 
     public MySQLXRepository(Class<Entity> entityClass, com.mysql.cj.xdevapi.Collection collection) {
         this.entityClass = entityClass;
         this.collection = collection;
-        this.jsonHelper = new JsonHelper(entityClass);
     }
 
     public MySQLXRepository(Class<Entity> entityClass, Schema schema) {
@@ -53,7 +52,7 @@ public class MySQLXRepository<Entity> implements Repository<Entity, String> {
     }
 
     public static DbDoc toDbDoc(Object entity, FieldPolicy updateFilter) {
-        var jsonNode = OBJECT_MAPPER.valueToTree(entity);
+        var jsonNode = ScxObject.valueToNode(entity);
         if (jsonNode instanceof ObjectNode objectNode) {
             var newObjectNode = filterObjectNode(objectNode, updateFilter);
             return (DbDoc) toJsonValue(newObjectNode);
@@ -114,13 +113,9 @@ public class MySQLXRepository<Entity> implements Repository<Entity, String> {
     }
 
     public Entity toEntity(DbDoc dbDoc, FieldPolicy filter) {
-        try {
-            var newDbDoc = filterDbDoc(dbDoc, filter);
-            var objectNode = toObjectNode(newDbDoc);
-            return jsonHelper.objectReader.readValue(objectNode);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        var newDbDoc = filterDbDoc(dbDoc, filter);
+        var objectNode = toObjectNode(newDbDoc);
+        return ScxObject.convertValue(objectNode,entityClass);
     }
 
 }

@@ -1,12 +1,12 @@
 package cool.scx.data.mysql_x;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.node.*;
 import com.mysql.cj.xdevapi.*;
 import cool.scx.common.util.ObjectUtils;
-import cool.scx.data.field_policy.FieldPolicy;
+import cool.scx.object.node.*;
+import dev.scx.data.field_policy.FieldPolicy;
+
+import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * @author scx567888
@@ -14,20 +14,10 @@ import cool.scx.data.field_policy.FieldPolicy;
  */
 class JsonHelper {
 
-    final static ObjectMapper OBJECT_MAPPER = ObjectUtils.jsonMapper(new ObjectUtils.Options().setIgnoreJsonIgnore(true));
-
-    final ObjectReader objectReader;
-
-    JsonHelper(Class<?> c) {
-        this.objectReader = OBJECT_MAPPER.readerFor(c);
-    }
-
-    public static JsonValue toJsonValue(JsonNode jsonNode) {
+    public static JsonValue toJsonValue(Node jsonNode) {
         if (jsonNode instanceof ObjectNode objectNode) {
             var dbDoc = new DbDocImpl();
-            var fields = objectNode.fields();
-            while (fields.hasNext()) {
-                var next = fields.next();
+            for (var next : objectNode) {
                 dbDoc.add(next.getKey(), toJsonValue(next.getValue()));
             }
             return dbDoc;
@@ -37,7 +27,7 @@ class JsonHelper {
                 jsonValue.add(toJsonValue(node));
             }
             return jsonValue;
-        } else if (jsonNode instanceof NumericNode numericNode) {
+        } else if (jsonNode instanceof NumberNode numericNode) {
             return new JsonNumber().setValue(numericNode.asText());
         } else if (jsonNode instanceof TextNode textNode) {
             return new JsonString().setValue(textNode.asText());
@@ -59,9 +49,10 @@ class JsonHelper {
                 yield objectNode;
             }
             case INCLUDED -> {
-                var newObjectNode = OBJECT_MAPPER.createObjectNode();
+                var newObjectNode = new ObjectNode();
                 for (var s : filter.getFieldNames()) {
-                    newObjectNode.set(s, objectNode.get(s));
+                    newObjectNode.put(s, objectNode.get(s));
+
                 }
                 yield newObjectNode;
             }
@@ -86,26 +77,26 @@ class JsonHelper {
         };
     }
 
-    public static JsonNode toObjectNode(JsonValue jsonValue) {
+    public static Node toObjectNode(JsonValue jsonValue) {
         if (jsonValue instanceof DbDoc dbDoc) {
-            var objectNode = OBJECT_MAPPER.createObjectNode();
+            var objectNode = new ObjectNode();
             dbDoc.forEach((key, value) -> {
-                objectNode.set(key, toObjectNode(value));
+                objectNode.put(key, toObjectNode(value));
             });
             return objectNode;
         } else if (jsonValue instanceof JsonArray jsonArray) {
-            var arrayNode = OBJECT_MAPPER.createArrayNode();
+            var arrayNode = new ArrayNode();
             for (var node : jsonArray) {
                 arrayNode.add(toObjectNode(node));
             }
             return arrayNode;
         } else if (jsonValue instanceof JsonNumber jsonNumber) {
-            return DecimalNode.valueOf(jsonNumber.getBigDecimal());
+            return new BigDecimalNode(jsonNumber.getBigDecimal());
         } else if (jsonValue instanceof JsonString jsonString) {
-            return TextNode.valueOf(jsonString.getString());
+            return new TextNode(jsonString.getString());
         } else if (jsonValue instanceof JsonLiteral jsonLiteral) {
             return switch (jsonLiteral) {
-                case NULL -> NullNode.getInstance();
+                case NULL -> NullNode.NULL;
                 case TRUE -> BooleanNode.TRUE;
                 case FALSE -> BooleanNode.FALSE;
             };

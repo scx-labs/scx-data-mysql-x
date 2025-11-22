@@ -2,16 +2,16 @@ package cool.scx.data.mysql_x.test;
 
 import com.mysql.cj.xdevapi.SessionFactory;
 import cool.scx.data.mysql_x.MySQLXRepository;
-import cool.scx.logging.ScxLoggerFactory;
+import dev.scx.logging.ScxLogging;
 import org.testng.annotations.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cool.scx.common.util.ObjectUtils.toJson;
-import static cool.scx.data.query.BuildControl.USE_EXPRESSION;
-import static cool.scx.data.query.QueryBuilder.*;
+import static cool.scx.object.ScxObject.toJson;
+import static dev.scx.data.query.BuildControl.USE_EXPRESSION;
+import static dev.scx.data.query.QueryBuilder.*;
 import static java.lang.System.Logger.Level.DEBUG;
 
 public class MySQLXDaoTest {
@@ -19,7 +19,7 @@ public class MySQLXDaoTest {
     public static final String databaseName = "scx_dao_test";
 
     static {
-        ScxLoggerFactory.rootConfig().setLevel(DEBUG);
+        ScxLogging.rootConfig().setLevel(DEBUG);
     }
 
     public static void main(String[] args) {
@@ -60,7 +60,7 @@ public class MySQLXDaoTest {
         var query2 = query().where(or(gt("age", 400), eq("name", "小明1")));
         var query3 = query().where(and(eq("age", 10), or(gt("age", 400), eq("name", "小明1"), and(in("name", new String[]{"小明2", "小明3"})))));
         var query4 = query().where(eq("JSON_EXTRACT(userInfo,'$.email')", "88@test.com", USE_EXPRESSION));
-        var query5 = query().where(whereClause("JSON_CONTAINS(tags, ?)", toJson(List.of("abc"), "")));
+        var query5 = query().where(whereClause("JSON_CONTAINS(tags, ?)", toJson(List.of("abc"))));
 
         //标准查询
         var a1 = mySQLXDao.find(query1);

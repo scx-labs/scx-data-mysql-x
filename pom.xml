@@ -88,6 +88,12 @@
             <version>${scx-common.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>cool.scx</groupId>
+            <artifactId>scx-object</artifactId>
+            <version>${scx-object.version}</version>
+        </dependency>
+
         <!-- ****************** 以下为测试依赖 ****************** -->
 
         <dependency>
@@ -110,6 +116,7 @@
 
         <scx-data.version>0.0.1</scx-data.version>
         <scx-common.version>4.5.0-SNAPSHOT</scx-common.version>
+        <scx-object.version>4.5.0-SNAPSHOT</scx-object.version>
         <mysql-connector-j.version>9.2.0</mysql-connector-j.version>
         <scx-logging.version>0.0.1</scx-logging.version>
         <testng.version>7.10.2</testng.version>

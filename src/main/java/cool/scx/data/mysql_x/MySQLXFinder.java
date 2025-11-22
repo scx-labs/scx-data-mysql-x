@@ -1,10 +1,10 @@
 package cool.scx.data.mysql_x;
 
-import cool.scx.data.Finder;
-import cool.scx.data.exception.DataAccessException;
-import cool.scx.data.field_policy.FieldPolicy;
-import cool.scx.data.query.Query;
-import cool.scx.functional.ScxConsumer;
+import dev.scx.data.Finder;
+import dev.scx.data.exception.DataAccessException;
+import dev.scx.data.field_policy.FieldPolicy;
+import dev.scx.data.query.Query;
+import dev.scx.function.Function1Void;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class MySQLXFinder<Entity> implements Finder<Entity> {
     }
 
     @Override
-    public <E extends Throwable> void forEach(ScxConsumer<Entity, E> entityConsumer) throws DataAccessException, E {
+    public <E extends Throwable> void forEach(Function1Void<Entity, E> entityConsumer) throws DataAccessException, E {
         var whereClause = WHERE_PARSER.parse(query.getWhere());
         var findStatement = repository.collection
                 .find(whereClause.expression())
@@ -70,17 +70,17 @@ public class MySQLXFinder<Entity> implements Finder<Entity> {
         }
         var docResult = findStatement.execute();
         for (var dbDoc : docResult) {
-            entityConsumer.accept(repository.toEntity(dbDoc, fieldPolicy));
+            entityConsumer.apply(repository.toEntity(dbDoc, fieldPolicy));
         }
     }
 
     @Override
-    public <T, E extends Throwable> void forEach(ScxConsumer<T, E> entityConsumer, Class<T> resultType) throws DataAccessException, E {
+    public <T, E extends Throwable> void forEach(Function1Void<T, E> entityConsumer, Class<T> resultType) throws DataAccessException, E {
         throw new UnsupportedOperationException("暂未实现");
     }
 
     @Override
-    public <E extends Throwable> void forEachMap(ScxConsumer<Map<String, Object>, E> entityConsumer) throws DataAccessException, E {
+    public <E extends Throwable> void forEachMap(Function1Void<Map<String, Object>, E> entityConsumer) throws DataAccessException, E {
         throw new UnsupportedOperationException("暂未实现");
     }
 
