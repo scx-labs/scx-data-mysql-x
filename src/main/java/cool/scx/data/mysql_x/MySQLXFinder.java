@@ -4,12 +4,12 @@ import dev.scx.data.Finder;
 import dev.scx.data.exception.DataAccessException;
 import dev.scx.data.field_policy.FieldPolicy;
 import dev.scx.data.query.Query;
+import dev.scx.exception.ScxWrappedException;
 import dev.scx.function.Function1Void;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import static cool.scx.data.mysql_x.parser.MySQLXDaoWhereParser.WHERE_PARSER;
 
@@ -57,7 +57,7 @@ public class MySQLXFinder<Entity> implements Finder<Entity> {
     }
 
     @Override
-    public <E extends Throwable> void forEach(Function1Void<Entity, E> entityConsumer) throws DataAccessException, E {
+    public void forEach(Function1Void<Entity, ?> entityConsumer) throws DataAccessException, ScxWrappedException {
         var whereClause = WHERE_PARSER.parse(query.getWhere());
         var findStatement = repository.collection
                 .find(whereClause.expression())
@@ -70,17 +70,21 @@ public class MySQLXFinder<Entity> implements Finder<Entity> {
         }
         var docResult = findStatement.execute();
         for (var dbDoc : docResult) {
-            entityConsumer.apply(repository.toEntity(dbDoc, fieldPolicy));
+            try {
+                entityConsumer.apply(repository.toEntity(dbDoc, fieldPolicy));
+            } catch (Throwable e) {
+                throw new ScxWrappedException(e);
+            }
         }
     }
 
     @Override
-    public <T, E extends Throwable> void forEach(Function1Void<T, E> entityConsumer, Class<T> resultType) throws DataAccessException, E {
+    public <T> void forEach(Function1Void<T, ?> entityConsumer, Class<T> resultType) throws DataAccessException, ScxWrappedException {
         throw new UnsupportedOperationException("暂未实现");
     }
 
     @Override
-    public <E extends Throwable> void forEachMap(Function1Void<Map<String, Object>, E> entityConsumer) throws DataAccessException, E {
+    public void forEachMap(Function1Void<Map<String, Object>, ?> entityConsumer) throws DataAccessException, ScxWrappedException {
         throw new UnsupportedOperationException("暂未实现");
     }
 

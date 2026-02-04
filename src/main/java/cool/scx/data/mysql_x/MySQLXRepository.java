@@ -2,16 +2,13 @@ package cool.scx.data.mysql_x;
 
 import com.mysql.cj.xdevapi.DbDoc;
 import com.mysql.cj.xdevapi.Schema;
-import cool.scx.common.util.CaseUtils;
-import cool.scx.common.util.StringUtils;
-import cool.scx.object.ScxObject;
-import cool.scx.object.node.ObjectNode;
 import dev.scx.data.Finder;
 import dev.scx.data.Repository;
 import dev.scx.data.field_policy.FieldPolicy;
 import dev.scx.data.query.Query;
+import dev.scx.node.ObjectNode;
+import dev.scx.serialize.ScxSerialize;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,18 +38,14 @@ public class MySQLXRepository<Entity> implements Repository<Entity, String> {
 
     public static String initCollectionName(Class<?> clazz) {
         var scxModel = clazz.getAnnotation(cool.scx.data.mysql_x.annotation.Collection.class);
-        if (scxModel != null && StringUtils.notBlank(scxModel.name())) {
-            return scxModel.name();
+        if (scxModel == null) {
+            throw new IllegalArgumentException("@Collection annotation not found");
         }
-        if (scxModel != null && StringUtils.notBlank(scxModel.prefix())) {
-            return scxModel.prefix() + "_" + CaseUtils.toSnake(clazz.getSimpleName());
-        }
-        //这里判断一下是否使用了数据库 如果使用 则表名省略掉 数据库限定名 否则的话则添加数据库限定名
-        return "scx_" + CaseUtils.toSnake(clazz.getSimpleName());
+        return scxModel.value();
     }
 
     public static DbDoc toDbDoc(Object entity, FieldPolicy updateFilter) {
-        var jsonNode = ScxObject.valueToNode(entity);
+        var jsonNode = ScxSerialize.objectToNode(entity);
         if (jsonNode instanceof ObjectNode objectNode) {
             var newObjectNode = filterObjectNode(objectNode, updateFilter);
             return (DbDoc) toJsonValue(newObjectNode);
@@ -115,7 +108,7 @@ public class MySQLXRepository<Entity> implements Repository<Entity, String> {
     public Entity toEntity(DbDoc dbDoc, FieldPolicy filter) {
         var newDbDoc = filterDbDoc(dbDoc, filter);
         var objectNode = toObjectNode(newDbDoc);
-        return ScxObject.convertValue(objectNode,entityClass);
+        return ScxSerialize.convertObject(objectNode,entityClass);
     }
 
 }
