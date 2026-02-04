@@ -1,9 +1,8 @@
 package cool.scx.data.mysql_x;
 
 import com.mysql.cj.xdevapi.*;
-import cool.scx.common.util.ObjectUtils;
-import cool.scx.object.node.*;
 import dev.scx.data.field_policy.FieldPolicy;
+import dev.scx.node.*;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -28,9 +27,9 @@ class JsonHelper {
             }
             return jsonValue;
         } else if (jsonNode instanceof NumberNode numericNode) {
-            return new JsonNumber().setValue(numericNode.asText());
-        } else if (jsonNode instanceof TextNode textNode) {
-            return new JsonString().setValue(textNode.asText());
+            return new JsonNumber().setValue(numericNode.asString());
+        } else if (jsonNode instanceof StringNode textNode) {
+            return new JsonString().setValue(textNode.asString());
         } else if (jsonNode instanceof NullNode nullNode) {
             return JsonLiteral.NULL;
         } else if (jsonNode instanceof BooleanNode booleanNode) {
@@ -93,7 +92,7 @@ class JsonHelper {
         } else if (jsonValue instanceof JsonNumber jsonNumber) {
             return new BigDecimalNode(jsonNumber.getBigDecimal());
         } else if (jsonValue instanceof JsonString jsonString) {
-            return new TextNode(jsonString.getString());
+            return new StringNode(jsonString.getString());
         } else if (jsonValue instanceof JsonLiteral jsonLiteral) {
             return switch (jsonLiteral) {
                 case NULL -> NullNode.NULL;

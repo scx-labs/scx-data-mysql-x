@@ -22,13 +22,6 @@ public @interface Collection {
      *
      * @return 表全限定名称
      */
-    String name() default "";
-
-    /**
-     * 表名称前缀
-     *
-     * @return 表前缀
-     */
-    String prefix() default "";
+    String value();
 
 }

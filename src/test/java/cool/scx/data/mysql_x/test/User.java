@@ -4,7 +4,7 @@ import cool.scx.data.mysql_x.annotation.Collection;
 
 import java.time.LocalDateTime;
 
-@Collection(prefix = "scx_dao_mysql_x")
+@Collection("scx_dao_mysql_x_user")
 public class User {
 
     public Long id;

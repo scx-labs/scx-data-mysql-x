@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cool.scx.object.ScxObject.toJson;
 import static dev.scx.data.query.BuildControl.USE_EXPRESSION;
 import static dev.scx.data.query.QueryBuilder.*;
+import static dev.scx.serialize.ScxSerialize.toJson;
 import static java.lang.System.Logger.Level.DEBUG;
 
 public class MySQLXDaoTest {
