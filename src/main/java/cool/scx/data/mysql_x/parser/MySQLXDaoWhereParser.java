@@ -1,13 +1,13 @@
 package cool.scx.data.mysql_x.parser;
 
-import cool.scx.common.util.StringUtils;
 import dev.scx.data.query.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
-import static cool.scx.common.util.ArrayUtils.toObjectArray;
+import static dev.scx.array.ScxArray.toWrapper;
 import static java.util.Collections.addAll;
 
 /**
@@ -39,7 +39,7 @@ public class MySQLXDaoWhereParser {
         if (whereParams.length == 0) {
             throw new IllegalArgumentException("");
         }
-        var v1 = "(" + StringUtils.repeat("?", ", ", whereParams.length) + ")";
+        var v1 = "(" + repeat("?", ", ", whereParams.length) + ")";
         var whereClause = w.selector() + " " + getWhereKeyWord(w.conditionType()) + " " + v1;
         return new WhereClause(whereClause, whereParams);
     }
@@ -117,6 +117,47 @@ public class MySQLXDaoWhereParser {
             case BETWEEN -> "BETWEEN";
             case NOT_BETWEEN -> "NOT BETWEEN";
         };
+    }
+
+    public static Object[] toObjectArray(Object source) {
+        if (source instanceof Object[] objectArr) {
+            return objectArr;
+        }
+        if (source == null) {
+            return new Object[0];
+        }
+        if (source instanceof Collection<?> collection) {
+            return collection.toArray();
+        }
+        if (source.getClass().isArray()) {
+            return switch (source) {
+                case byte[] arr -> toWrapper(arr);
+                case short[] arr -> toWrapper(arr);
+                case int[] arr -> toWrapper(arr);
+                case long[] arr -> toWrapper(arr);
+                case float[] arr -> toWrapper(arr);
+                case double[] arr -> toWrapper(arr);
+                case boolean[] arr -> toWrapper(arr);
+                case char[] arr -> toWrapper(arr);
+                default -> throw new IllegalStateException("错误值 : " + source);
+            };
+        }
+        throw new IllegalArgumentException("源数据无法转换为数组对象 !!!");
+    }
+
+    /// 创建重复字符串 (带分隔符) 拓展了 {@link String#repeat(int)} 无法添加分隔符的功能
+    ///
+    /// @param str       源字符串
+    /// @param delimiter 分隔符
+    /// @param count     重复次数
+    /// @return 结果
+    public static String repeat(String str, String delimiter, int count) {
+        if (count == 0) {
+            return "";
+        }
+        var element = str + delimiter;
+        var result = element.repeat(count);
+        return result.substring(0, result.length() - delimiter.length());
     }
 
 }

@@ -10,9 +10,8 @@
         <relativePath/>
     </parent>
 
-    <groupId>cool.scx</groupId>
     <artifactId>scx-data-mysql-x</artifactId>
-    <version>4.5.0-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
 
     <name>SCX Data MySQL X</name>
@@ -83,9 +82,9 @@
         </dependency>
 
         <dependency>
-            <groupId>cool.scx</groupId>
-            <artifactId>scx-common</artifactId>
-            <version>${scx-common.version}</version>
+            <groupId>dev.scx</groupId>
+            <artifactId>scx-array</artifactId>
+            <version>${scx-array.version}</version>
         </dependency>
 
         <dependency>
@@ -115,26 +114,12 @@
     <properties>
 
         <scx-data.version>0.1.0</scx-data.version>
-        <scx-common.version>4.5.0-SNAPSHOT</scx-common.version>
+        <scx-array.version>0.0.1</scx-array.version>
         <scx-serialize.version>0.1.0</scx-serialize.version>
         <mysql-connector-j.version>9.2.0</mysql-connector-j.version>
         <scx-logging.version>0.0.1</scx-logging.version>
         <testng.version>7.10.2</testng.version>
 
     </properties>
-
-    <repositories>
-        <repository>
-            <name>Central Portal Snapshots</name>
-            <id>central-portal-snapshots</id>
-            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
 </project>
