@@ -4,8 +4,8 @@
     <a target="_blank" href="https://github.com/scx-projects/scx-data-mysql-x/actions/workflows/ci.yml">
         <img src="https://github.com/scx-projects/scx-data-mysql-x/actions/workflows/ci.yml/badge.svg" alt="CI"/>
     </a>
-    <a target="_blank" href="https://central.sonatype.com/artifact/cool.scx/scx-data-mysql-x">
-        <img src="https://img.shields.io/maven-central/v/cool.scx/scx-data-mysql-x?color=ff69b4" alt="maven-central"/>
+    <a target="_blank" href="https://central.sonatype.com/artifact/dev.scx/scx-data-mysql-x">
+        <img src="https://img.shields.io/maven-central/v/dev.scx/scx-data-mysql-x?color=ff69b4" alt="maven-central"/>
     </a>
     <a target="_blank" href="https://github.com/scx-projects/scx-data-mysql-x">
         <img src="https://img.shields.io/github/languages/code-size/scx-projects/scx-data-mysql-x?color=orange" alt="code-size"/>
