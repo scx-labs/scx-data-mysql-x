@@ -29,8 +29,8 @@ public class MySQLXFinder<Entity> implements Finder<Entity> {
     public List<Entity> list() {
         var whereClause = WHERE_PARSER.parse(query.getWhere());
         var findStatement = repository.collection
-                .find(whereClause.expression())
-                .bind(whereClause.params());
+            .find(whereClause.expression())
+            .bind(whereClause.params());
         if (query.getOffset() != null) {
             findStatement.offset(query.getOffset());
         }
@@ -60,8 +60,8 @@ public class MySQLXFinder<Entity> implements Finder<Entity> {
     public void forEach(Function1Void<Entity, ?> entityConsumer) throws DataAccessException, ScxWrappedException {
         var whereClause = WHERE_PARSER.parse(query.getWhere());
         var findStatement = repository.collection
-                .find(whereClause.expression())
-                .bind(whereClause.params());
+            .find(whereClause.expression())
+            .bind(whereClause.params());
         if (query.getOffset() != null) {
             findStatement.offset(query.getOffset());
         }
@@ -92,9 +92,9 @@ public class MySQLXFinder<Entity> implements Finder<Entity> {
     public Entity first() {
         var whereClause = WHERE_PARSER.parse(query.getWhere());
         var findStatement = repository.collection
-                .find(whereClause.expression())
-                .bind(whereClause.params())
-                .limit(1);
+            .find(whereClause.expression())
+            .bind(whereClause.params())
+            .limit(1);
 
         var docResult = findStatement.execute();
         var dbDoc = docResult.fetchOne();
@@ -116,9 +116,9 @@ public class MySQLXFinder<Entity> implements Finder<Entity> {
     public long count() {
         var whereClause = WHERE_PARSER.parse(query.getWhere());
         var docResult = repository.collection
-                .find(whereClause.expression())
-                .bind(whereClause.params())
-                .execute();
+            .find(whereClause.expression())
+            .bind(whereClause.params())
+            .execute();
         return docResult.count();
     }
 

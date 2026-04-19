@@ -83,10 +83,10 @@ public class MySQLXRepository<Entity> implements Repository<Entity, String> {
         var whereClause = WHERE_PARSER.parse(query.getWhere());
         var newDoc = toDbDoc(entity, updateFilter.exclude("_id"));
         var result = this.collection
-                .modify(whereClause.expression())
-                .bind(whereClause.params())
-                .patch(newDoc)
-                .execute();
+            .modify(whereClause.expression())
+            .bind(whereClause.params())
+            .patch(newDoc)
+            .execute();
         return result.getAffectedItemsCount();
     }
 
@@ -94,9 +94,9 @@ public class MySQLXRepository<Entity> implements Repository<Entity, String> {
     public long delete(Query query) {
         var whereClause = WHERE_PARSER.parse(query.getWhere());
         var result = this.collection
-                .remove(whereClause.expression())
-                .bind(whereClause.params())
-                .execute();
+            .remove(whereClause.expression())
+            .bind(whereClause.params())
+            .execute();
         return result.getAffectedItemsCount();
     }
 
@@ -108,7 +108,7 @@ public class MySQLXRepository<Entity> implements Repository<Entity, String> {
     public Entity toEntity(DbDoc dbDoc, FieldPolicy filter) {
         var newDbDoc = filterDbDoc(dbDoc, filter);
         var objectNode = toObjectNode(newDbDoc);
-        return ScxSerialize.convertObject(objectNode,entityClass);
+        return ScxSerialize.convertObject(objectNode, entityClass);
     }
 
 }
