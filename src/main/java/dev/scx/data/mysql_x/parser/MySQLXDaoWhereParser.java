@@ -1,4 +1,4 @@
-package cool.scx.data.mysql_x.parser;
+package dev.scx.data.mysql_x.parser;
 
 import dev.scx.data.query.*;
 

@@ -1,6 +1,6 @@
-package cool.scx.data.mysql_x.test;
+package dev.scx.data.mysql_x.test;
 
-import cool.scx.data.mysql_x.annotation.Collection;
+import dev.scx.data.mysql_x.annotation.Collection;
 
 import java.time.LocalDateTime;
 

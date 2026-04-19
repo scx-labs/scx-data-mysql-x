@@ -1,4 +1,4 @@
-package cool.scx.data.mysql_x.annotation;
+package dev.scx.data.mysql_x.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

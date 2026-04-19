@@ -1,4 +1,4 @@
-package cool.scx.data.mysql_x;
+package dev.scx.data.mysql_x;
 
 import com.mysql.cj.xdevapi.*;
 import dev.scx.data.field_policy.FieldPolicy;

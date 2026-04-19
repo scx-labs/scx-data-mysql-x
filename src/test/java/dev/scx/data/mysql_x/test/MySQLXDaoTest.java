@@ -1,7 +1,7 @@
-package cool.scx.data.mysql_x.test;
+package dev.scx.data.mysql_x.test;
 
 import com.mysql.cj.xdevapi.SessionFactory;
-import cool.scx.data.mysql_x.MySQLXRepository;
+import dev.scx.data.mysql_x.MySQLXRepository;
 import dev.scx.logging.ScxLogging;
 import org.testng.annotations.Test;
 

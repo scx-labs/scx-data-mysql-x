@@ -1,4 +1,4 @@
-package cool.scx.data.mysql_x;
+package dev.scx.data.mysql_x;
 
 import dev.scx.data.Finder;
 import dev.scx.data.exception.DataAccessException;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static cool.scx.data.mysql_x.parser.MySQLXDaoWhereParser.WHERE_PARSER;
+import static dev.scx.data.mysql_x.parser.MySQLXDaoWhereParser.WHERE_PARSER;
 
 public class MySQLXFinder<Entity> implements Finder<Entity> {
 

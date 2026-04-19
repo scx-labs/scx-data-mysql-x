@@ -1,4 +1,4 @@
-package cool.scx.data.mysql_x;
+package dev.scx.data.mysql_x;
 
 import com.mysql.cj.xdevapi.DbDoc;
 import com.mysql.cj.xdevapi.Schema;
@@ -12,8 +12,8 @@ import dev.scx.serialize.ScxSerialize;
 import java.util.Collection;
 import java.util.List;
 
-import static cool.scx.data.mysql_x.JsonHelper.*;
-import static cool.scx.data.mysql_x.parser.MySQLXDaoWhereParser.WHERE_PARSER;
+import static dev.scx.data.mysql_x.JsonHelper.*;
+import static dev.scx.data.mysql_x.parser.MySQLXDaoWhereParser.WHERE_PARSER;
 
 /**
  * 使用 MySQL X Dev Api 通过 MySQL X 协议, 操作 MySQL 的 Dao
@@ -37,7 +37,7 @@ public class MySQLXRepository<Entity> implements Repository<Entity, String> {
     }
 
     public static String initCollectionName(Class<?> clazz) {
-        var scxModel = clazz.getAnnotation(cool.scx.data.mysql_x.annotation.Collection.class);
+        var scxModel = clazz.getAnnotation(dev.scx.data.mysql_x.annotation.Collection.class);
         if (scxModel == null) {
             throw new IllegalArgumentException("@Collection annotation not found");
         }
