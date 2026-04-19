@@ -56,11 +56,11 @@ public class MySQLXDaoTest {
         System.out.println("MySQLX 插入 : " + newIDs.size());
 
         //创建 query
-        var query1 = query().where(gt("age", 300));
-        var query2 = query().where(or(gt("age", 400), eq("name", "小明1")));
-        var query3 = query().where(and(eq("age", 10), or(gt("age", 400), eq("name", "小明1"), and(in("name", new String[]{"小明2", "小明3"})))));
-        var query4 = query().where(eq("JSON_EXTRACT(userInfo,'$.email')", "88@test.com", USE_EXPRESSION));
-        var query5 = query().where(whereClause("JSON_CONTAINS(tags, ?)", toJson(List.of("abc"))));
+        var query1 = gt("age", 300);
+        var query2 = or(gt("age", 400), eq("name", "小明1"));
+        var query3 = and(eq("age", 10), or(gt("age", 400), eq("name", "小明1"), and(in("name", new String[]{"小明2", "小明3"}))));
+        var query4 = eq("JSON_EXTRACT(userInfo,'$.email')", "88@test.com", USE_EXPRESSION);
+        var query5 = whereClause("JSON_CONTAINS(tags, ?)", toJson(List.of("abc")));
 
         //标准查询
         var a1 = mySQLXDao.find(query1);
